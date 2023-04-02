@@ -1,37 +1,39 @@
 package com.example.dao_hibernate.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "persons")
 public class Person implements Serializable {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long id;
+
     @Column(name = "name")
     public String name;
-    @Id
+
     @Column(name = "surname")
     public String surname;
-    @Id
+
     @Column(name = "age")
     public int age;
-    @Column(name = "phone_number")
-    public String phone_number;
-    @Column(name = "city_of_living")
-    public String city_of_living;
+    @Column(name = "phoneNumber")
+    public String phoneNumber;
+    @Column(name = "cityOfLiving")
+    public String cityOfLiving;
 
     public Person() {
     }
 
-    public Person(String name, String surname, int age, String phone_number, String city_of_living) {
+    public Person(long id, String name, String surname, int age, String phoneNumber, String cityOfLiving) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.age = age;
-        this.phone_number = phone_number;
-        this.city_of_living = city_of_living;
+        this.phoneNumber = phoneNumber;
+        this.cityOfLiving = cityOfLiving;
     }
 
     public String getName() {
@@ -58,30 +60,32 @@ public class Person implements Serializable {
         this.age = age;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getCity_of_living() {
-        return city_of_living;
+    public String getCityOfLiving() {
+        return cityOfLiving;
     }
 
-    public void setCity_of_living(String city_of_living) {
-        this.city_of_living = city_of_living;
+    public void setCityOfLiving(String cityOfLiving) {
+        this.cityOfLiving = cityOfLiving;
     }
 
     @Override
     public String toString() {
         return "Person{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
-                ", phone_number='" + phone_number + '\'' +
-                ", city_of_living='" + city_of_living + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", cityOfLiving='" + cityOfLiving + '\'' +
                 '}';
     }
 }
+

@@ -1,6 +1,7 @@
 package com.example.dao_hibernate;
 
 import com.example.dao_hibernate.entity.Person;
+import com.example.dao_hibernate.repository.PersonRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,16 +10,23 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-
 @SpringBootApplication
 public class DaoHibernateApplication implements CommandLineRunner {
     @PersistenceContext
     EntityManager entityManager;
 
+    public DaoHibernateApplication(PersonRepository personRepository) {
+
+        this.personRepository = personRepository;
+    }
+
+    PersonRepository personRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(DaoHibernateApplication.class, args);
 
     }
+
     @Transactional
     @Override
     public void run(String... args) throws Exception {
@@ -27,33 +35,35 @@ public class DaoHibernateApplication implements CommandLineRunner {
         tom.setName("Tom");
         tom.setSurname("Tomer");
         tom.setAge(44);
-        tom.setCity_of_living("Kostroma");
-        tom.setPhone_number("1234");
-        entityManager.persist(tom);
+        tom.setCityOfLiving("Kostroma");
+        tom.setPhoneNumber("1234");
 
         Person ivan = new Person();
         ivan.setName("Ivan");
         ivan.setSurname("Ivanov");
         ivan.setAge(34);
-        ivan.setCity_of_living("Buy");
-        ivan.setPhone_number("1222");
-        entityManager.persist(ivan);
+        ivan.setCityOfLiving("Buy");
+        ivan.setPhoneNumber("1222");
 
         Person fedr = new Person();
         fedr.setName("Fedr");
         fedr.setSurname("Fedorov");
         fedr.setAge(64);
-        fedr.setCity_of_living("Susanino");
-        fedr.setPhone_number("3333");
-        entityManager.persist(fedr);
+        fedr.setCityOfLiving("Susanino");
+        fedr.setPhoneNumber("3333");
 
         Person roma = new Person();
         roma.setName("Roma");
         roma.setSurname("Romov");
         roma.setAge(18);
-        roma.setCity_of_living("Kostroma");
-        roma.setPhone_number("8888");
-        entityManager.persist(roma);
+        roma.setCityOfLiving("Kostroma");
+        roma.setPhoneNumber("8888");
+
+        personRepository.save(roma);
+        personRepository.save(tom);
+        personRepository.save(ivan);
+        personRepository.save(fedr);
+        personRepository.save(roma);
 
     }
 }
