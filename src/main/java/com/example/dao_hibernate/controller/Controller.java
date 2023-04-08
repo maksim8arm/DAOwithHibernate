@@ -1,15 +1,15 @@
 package com.example.dao_hibernate.controller;
 
-import com.example.dao_hibernate.entity.Person;
 import com.example.dao_hibernate.repository.PersonRepository;
 import com.example.dao_hibernate.repository.RepositoryPerson;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 public class Controller {
@@ -22,31 +22,33 @@ public class Controller {
         this.personRepository = personRepository;
     }
 
-    @GetMapping("/products/fetch-product")
-    @ResponseBody
-    public List getUserName(@RequestParam("city") String city) {
-        return repositoryPerson.getPersonsByCity(city);
+    @Secured({"ROLE_READ"})
+    @GetMapping("/read")
+    public String read() {
+        return "READ";
     }
 
-    @GetMapping("/fcity")
-    @ResponseBody
-    public List<Person> getCity(@RequestParam("city") String city) {
-
-        return personRepository.findAllByCityOfLiving(city);
+    @RolesAllowed({"ROLE_WRITE"})
+    @GetMapping("/write")
+    public String write() {
+        return "WRITE";
     }
 
-    @GetMapping("/fage")
-    @ResponseBody
-    public List<Person> getAge(@RequestParam("age") int age) {
-
-        return personRepository.findAllByAgeLessThanOrderByAgeAsc(age);
+    @PreAuthorize("hasRole('WRITE') or hasRole('DELETE')")
+    @GetMapping("/delete")
+    public String delete() {
+        return "DELETE";
     }
 
-    @GetMapping("/fnamesur")
-    @ResponseBody
-    public Optional<Person> getNameAndSurname(@RequestParam("name") String name,
-                                              @RequestParam("surname") String surname) {
-        return personRepository.findByNameAndSurname(name, surname);
+    @PostAuthorize("hasRole('WRITE') or hasRole('DELETE')")
+    @GetMapping("/write2")
+    public String write2() {
+        return "WRITE2";
     }
 
+    @PreAuthorize("principal.username == #name")
+    @GetMapping("/name")
+    public String name(@Param("name") String name) {
+        return name;
+    }
 }
